@@ -20,10 +20,20 @@ const TextSection = styled.div`
   overflow: scroll;
 `;
 
+const KeywordsSection = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  > * {
+    margin: 2px;
+  }
+`;
+
 const Controls = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
 `;
 
-export {WordSection, TextSection, Controls};
+export {WordSection, TextSection, KeywordsSection, Controls};

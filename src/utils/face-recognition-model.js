@@ -41,7 +41,7 @@ class FaceRecognitionModel {
         this.pose = POSES.FACING_FRONT;
       }
 
-      // console.log(this.pose);
+      console.log(this.pose);
     }
 
     this.model.detect(this.gotFaces);
@@ -49,7 +49,7 @@ class FaceRecognitionModel {
 
   isFacingAway = () => {
     const {jawOutline} = this.face.parts;
-    const differenceThreshold = 135;
+    const differenceThreshold = 145;
     const size = jawOutline.length - 1;
     const pointsToTest = 3;
 

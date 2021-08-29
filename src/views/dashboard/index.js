@@ -3,9 +3,10 @@ import React, {useEffect, useState} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
 import {POSES} from 'utils/constants';
-import {Button} from 'antd';
-import {WordSection, TextSection, Controls} from './elements';
+import {Tag, Button} from 'antd';
+import {WordSection, TextSection, KeywordsSection, Controls} from './elements';
 import {PauseOutlined, PlayCircleOutlined} from '@ant-design/icons';
+import keywordExtractor from 'keyword-extractor';
 
 const onKeyPressed = (p5, event) => {
   if (!p5 || !event) return;
@@ -23,6 +24,23 @@ const onKeyPressed = (p5, event) => {
   }
 };
 
+const loadKeywords = (text, setKeywords) => {
+  const extractedKeywords = keywordExtractor.extract(text, {
+    return_chained_words: true,
+    remove_duplicates: true,
+  });
+
+  const keywordsToSet = extractedKeywords.filter((keyword) => {
+    const wordCount = keyword.split(' ').length;
+    return (
+      keyword[0].toUpperCase() === keyword[0] ||
+      (wordCount > 1 && wordCount <= 3)
+    );
+  });
+
+  setKeywords(keywordsToSet.slice(5));
+};
+
 const Dashboard = () => {
   const [currentWord, setCurrentWord] = useState(0);
   const [FRS, setFRS] = useState();
@@ -30,6 +48,7 @@ const Dashboard = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [text, setText] = useState('');
   const [words, setWords] = useState([]);
+  const [keywords, setKeywords] = useState([]);
   const [pause, setPause] = useState(true);
 
   const getText = () => {
@@ -79,6 +98,7 @@ const Dashboard = () => {
     const wordsToSet = text?.split(' ');
     setCurrentWord(wordsToSet?.[0]);
     setWords(wordsToSet);
+    loadKeywords(text, setKeywords);
   }, [text]);
 
   useEffect(() => {
@@ -120,6 +140,13 @@ const Dashboard = () => {
         />
       </Controls>
       <TextSection>{text}</TextSection>
+      <KeywordsSection>
+        {keywords.map((keyword) => (
+          <Tag color="#87d068" key={keyword}>
+            {keyword}
+          </Tag>
+        ))}
+      </KeywordsSection>
     </div>
   );
 };

@@ -21,6 +21,7 @@
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.5",
     "antd": "^4.16.13",
+    "keyword-extractor": "^0.0.20",
     "ml5": "^0.6.1",
     "react": "^16.13.1",
     "react-browser-extension-scripts": "^4.0.10",

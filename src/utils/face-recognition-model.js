@@ -8,7 +8,9 @@ class FaceRecognitionModel {
   pose = POSES.FACING_FRONT;
 
   setup = (p5) => {
+    p5.createCanvas(0, 0);
     const video = p5.createCapture(p5.VIDEO);
+    video.size(0, 0);
     video.hide();
 
     const faceOptions = {
@@ -40,8 +42,6 @@ class FaceRecognitionModel {
       } else {
         this.pose = POSES.FACING_FRONT;
       }
-
-      console.log(this.pose);
     }
 
     this.model.detect(this.gotFaces);

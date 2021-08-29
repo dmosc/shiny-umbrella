@@ -28,7 +28,7 @@ class FaceRecognitionModel {
       return;
     }
 
-    if (result) {
+    if (result?.[0]) {
       const [{parts, landmarks}] = result;
       this.face = {parts, landmarks};
       console.log(this.face);

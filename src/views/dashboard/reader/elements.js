@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Word = styled.div`
   display: flex;
-  padding: 10px 0;
+  padding: 5px 0;
   justify-content: center;
   font-weight: bold;
   font-size: xxx-large;

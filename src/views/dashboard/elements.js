@@ -17,7 +17,7 @@ const KeywordsSection = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  margin: 20px 0;
+  margin: 10px 0 0 0;
 
   > * {
     margin: 2px;
@@ -30,12 +30,18 @@ const Controls = styled.div`
   width: 100%;
   justify-content: center;
   position: absolute;
-  top: 85vh;
+  top: 87vh;
   left: 0;
 
   > * {
     margin: 20px 15px;
   }
+`;
+
+const InformationSection = styled.div`
+  display: flex;
+  color: honeydew;
+  margin-top: 5px;
 `;
 
 const Image = styled.img`
@@ -62,17 +68,18 @@ const WordSmall = styled.span`
   padding: 3px;
 
   &:hover {
-    color: green;
+    color: yellow;
   }
 `;
 
 const CurrentWordSmall = styled(WordSmall)`
-  background-color: green;
+  color: yellow;
 `;
 
 export {
   TextSection,
   Controls,
+  InformationSection,
   Image,
   NotFoundContainer,
   NotFoundText,

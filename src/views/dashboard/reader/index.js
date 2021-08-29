@@ -78,7 +78,7 @@ class SpeedyReader extends Component {
 
     return {
       currentPosition: 0,
-      currentText: '',
+      currentText: words[0],
       isPlaying: autoPlay,
       words,
     };
@@ -238,7 +238,7 @@ class SpeedyReader extends Component {
 
   /**
    * Renders the Speedy Reader component
-   * @return {ReactElement} Renders the Speedy Reader markup
+   * @return {JSX.Element} Renders the Speedy Reader markup
    */
   render() {
     const {currentText} = this.state;

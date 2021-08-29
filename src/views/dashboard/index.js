@@ -1,24 +1,25 @@
 /* eslint-disable valid-jsdoc */
-import React, {Fragment, useEffect, useState, useRef} from 'react';
+import React, {Fragment, useEffect, useRef, useState} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
 import {POSES} from 'utils/constants';
-import {Tag, Button} from 'antd';
+import {Button, Tag} from 'antd';
 import {
-  TextSection,
   Controls,
+  CurrentWordSmall,
   Image,
+  InformationSection,
+  KeywordsSection,
   NotFoundContainer,
   NotFoundText,
+  TextSection,
   WordSmall,
-  CurrentWordSmall,
-  KeywordsSection,
 } from './elements';
 import {
   DownCircleOutlined,
-  UpCircleOutlined,
   PauseCircleOutlined,
   PlayCircleOutlined,
+  UpCircleOutlined,
 } from '@ant-design/icons';
 import keywordExtractor from 'keyword-extractor';
 import Reader from './reader';
@@ -132,7 +133,9 @@ const Dashboard = () => {
           <TextSection>
             {readerRef.current?.state.words.map((word, index) =>
               index === readerRef.current?.state.currentPosition - 1 ? (
-                <CurrentWordSmall key={word + index}>{word}</CurrentWordSmall>
+                <Fragment key={word + index}>
+                  <CurrentWordSmall>{word}</CurrentWordSmall>
+                </Fragment>
               ) : (
                 <Fragment key={word + index}>
                   <WordSmall
@@ -146,6 +149,7 @@ const Dashboard = () => {
               ),
             )}
           </TextSection>
+          <InformationSection>WPM: {speed}</InformationSection>
           <Controls>
             <Button
               style={{boxShadow: '0px 5px 5px #0f0f0f'}}

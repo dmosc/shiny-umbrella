@@ -7,10 +7,8 @@ import {Content} from './elements';
 const MainLayout = ({children}) => {
   return (
     <Layout>
-      <Layout>
-        <Navbar />
-        <Content>{children}</Content>
-      </Layout>
+      <Navbar />
+      <Content>{children}</Content>
     </Layout>
   );
 };

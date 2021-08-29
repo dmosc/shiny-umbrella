@@ -26,7 +26,7 @@ const NavBar = () => {
             <img
               style={{height: '80px'}}
               src="/static/spree-logo.png"
-              alt="Precise Fit"
+              alt="Spree"
             />
           }
         />

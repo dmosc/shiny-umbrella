@@ -13,22 +13,23 @@ const TextSection = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 20px;
-  //height: 400px;
   color: white;
   font-weight: bold;
+  height: 40vh;
   overflow: scroll;
   flex-wrap: wrap;
+  box-shadow: 0px 5px 5px #0f0f0f;
 `;
 
 const KeywordsSection = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  margin-top: 20px;
-  padding: 20px;
+  margin: 20px 0;
 
   > * {
     margin: 2px;
+    font-weight: bold;
   }
 `;
 
@@ -36,6 +37,9 @@ const Controls = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
+  position: absolute;
+  top: 85vh;
+  left: 0;
 
   > * {
     margin: 20px 15px;

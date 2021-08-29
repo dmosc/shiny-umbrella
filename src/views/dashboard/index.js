@@ -1,11 +1,10 @@
 /* eslint-disable valid-jsdoc */
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState, useRef} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
 import {POSES} from 'utils/constants';
 import {Tag, Button} from 'antd';
 import {
-  WordSection,
   TextSection,
   Controls,
   Image,
@@ -16,12 +15,13 @@ import {
   KeywordsSection,
 } from './elements';
 import {
-  DownCircleOutlined,
-  UpCircleOutlined,
-  PauseCircleOutlined,
+  DownOutlined,
+  UpOutlined,
+  PauseOutlined,
   PlayCircleOutlined,
 } from '@ant-design/icons';
 import keywordExtractor from 'keyword-extractor';
+import Reader from './reader';
 
 const onKeyPressed = (p5, event) => {
   if (!p5 || !event) return;
@@ -56,20 +56,14 @@ const loadKeywords = (text, setKeywords) => {
   setKeywords(keywordsToSet.slice(0, 5));
 };
 
-const wordsPerMinuteToMs = (wpm) => {
-  return 600000 / wpm;
-};
 
 const Dashboard = () => {
-  const [currentWord, setCurrentWord] = useState(0);
+  const readerRef = useRef();
   const [FRS, setFRS] = useState();
   const [pose, setPose] = useState();
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [text, setText] = useState('');
-  const [words, setWords] = useState([]);
   const [keywords, setKeywords] = useState([]);
-  const [pause, setPause] = useState(true);
-  const [wpm, setWpm] = useState(200);
+  const [speed, setSpeed] = useState(250);
 
   const getText = () => {
     const message = {message: 'GET_SELECTED_TEXT'};
@@ -106,110 +100,88 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (pose === POSES.FACING_FRONT) {
-      console.log('Play');
-      setPause(false);
+      readerRef.current?.play();
     } else {
-      console.log('Pause');
-      setPause(true);
+      readerRef.current?.pause();
     }
   }, [pose]);
 
   useEffect(() => {
-    const wordsToSet = text?.split(' ');
-    setCurrentWord(wordsToSet?.[0]);
-    setWords(wordsToSet);
     loadKeywords(text, setKeywords);
   }, [text]);
 
-  useEffect(() => {
-    if (words.length) {
-      const interval = setInterval(() => {
-        setPause((isPaused) => {
-          if (currentWordIndex < words.length && !isPaused) {
-            setCurrentWordIndex((prev) => {
-              setCurrentWord(words[prev]);
-              return prev + 1;
-            });
-          }
-          return isPaused;
-        });
-      }, wordsPerMinuteToMs(wpm));
-
-      return () => clearInterval(interval);
-    }
-
-    return () => {};
-  }, [words, wpm]);
+  console.log(speed)
 
   return (
-    <>
-      <div style={{width: 500, height: '70vh', position: 'relative'}}>
-        {FRS && (
-          <Sketch
-            setup={FRS.setup}
-            keyPressed={onKeyPressed}
-            draw={() => setPose(FRS.pose)}
-          />
-        )}
-        {words.length > 1 ? (
-          <>
-            <WordSection>{currentWord || words[words.length - 1]}</WordSection>
-            <KeywordsSection>
-              {keywords.map((keyword) => (
-                <Tag color="#f54747" key={keyword}>
-                  {keyword}
-                </Tag>
-              ))}
-            </KeywordsSection>
-            <TextSection>
-              {words.map((word, index) =>
-                index === currentWordIndex ? (
-                  <Fragment key={word + index}>
-                    <CurrentWordSmall>{word}</CurrentWordSmall>{' '}
-                  </Fragment>
+    <div style={{width: 500, height: 900, overflow: 'scroll'}}>
+      {FRS && (
+        <Sketch
+          setup={FRS.setup}
+          keyPressed={onKeyPressed}
+          draw={() => setPose(FRS.pose)}
+        />
+      )}
+      {text && (
+        <Reader ref={readerRef} autoPlay speed={speed} inputText={text} />
+      )}
+      {readerRef.current?.state.words.length > 1 ? (
+        <>
+          <KeywordsSection>
+            {keywords.map((keyword) => (
+              <Tag color="#87d068" style={{color: 'black'}} key={keyword}>
+                {keyword}
+              </Tag>
+            ))}
+          </KeywordsSection>
+          <TextSection>
+            {readerRef.current?.state.words.map((word, index) =>
+              index === readerRef.current?.state.currentPosition - 1 ? (
+                <Fragment key={word + index}>
+                  <CurrentWordSmall>{word}</CurrentWordSmall>{' '}
+                </Fragment>
+              ) : (
+                <Fragment key={word + index}>
+                  <WordSmall>{word} </WordSmall>{' '}
+                </Fragment>
+              ),
+            )}
+          </TextSection>
+          <Controls>
+            <Button
+              ghost
+              danger
+              icon={<DownOutlined />}
+              size="large"
+              onClick={() => setSpeed((prev) => prev - 25)}
+            />
+            <Button
+              ghost
+              danger
+              icon={
+                !readerRef.current?.state.isPlaying ? (
+                  <PlayCircleOutlined />
                 ) : (
-                  <Fragment key={word + index}>
-                    <WordSmall>{word} </WordSmall>{' '}
-                  </Fragment>
-                ),
-              )}
-            </TextSection>
-          </>
-        ) : (
-          <NotFoundContainer>
-            <Image src="./static/no-words.svg" />
-            <NotFoundText>No hay texto seleccionado</NotFoundText>
-          </NotFoundContainer>
-        )}
-      </div>
-      <div>
-        <Controls>
-          <Button
-            style={{boxShadow: '0px 5px 5px #0f0f0f'}}
-            ghost
-            danger
-            icon={<DownCircleOutlined />}
-            size="large"
-            onClick={() => setWpm(wpm - 25)}
-          />
-          <Button
-            style={{boxShadow: '0px 5px 5px #0f0f0f'}}
-            ghost
-            danger
-            icon={!pause ? <PlayCircleOutlined /> : <PauseCircleOutlined />}
-            size="large"
-          />
-          <Button
-            style={{boxShadow: '0px 5px 5px #0f0f0f'}}
-            ghost
-            danger
-            icon={<UpCircleOutlined />}
-            size="large"
-            onClick={() => setWpm(wpm + 25)}
-          />
-        </Controls>
-      </div>
-    </>
+                  <PauseOutlined />
+                )
+              }
+              size="large"
+            />
+            <Button
+              ghost
+              danger
+              icon={<UpOutlined />}
+              size="large"
+              onClick={() => setSpeed((prev) => prev + 25)}
+            />
+          </Controls>
+        </>
+      ) : (
+        <NotFoundContainer>
+          <Image src="./static/no-words.svg" />
+          <NotFoundText>No hay texto seleccionado</NotFoundText>
+        </NotFoundContainer>
+      )}
+    </div>
   );
 };
 

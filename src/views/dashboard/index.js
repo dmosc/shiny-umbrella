@@ -8,14 +8,10 @@ import {POSES} from 'utils/constants';
 import {Button, message, Tag} from 'antd';
 import {
   Controls,
-  CurrentWordSmall,
-  Image,
   InformationSection,
-  KeywordsSection,
+  Image,
   NotFoundContainer,
   NotFoundText,
-  TextSection,
-  WordSmall,
 } from './elements';
 import {
   DownCircleOutlined,
@@ -23,7 +19,6 @@ import {
   PlayCircleOutlined,
   UpCircleOutlined,
 } from '@ant-design/icons';
-import keywordExtractor from 'keyword-extractor';
 import Reader from './reader';
 
 const onKeyPressed = (p5, event, setSpeed, setShouldRead, readerRef) => {
@@ -42,36 +37,6 @@ const onKeyPressed = (p5, event, setSpeed, setShouldRead, readerRef) => {
   }
 };
 
-const loadKeywords = (text, setKeywords) => {
-  const extractedKeywords = keywordExtractor.extract(text, {
-    return_chained_words: true,
-    remove_duplicates: true,
-  });
-
-  const keywordsToSet = extractedKeywords.filter((keyword) => {
-    const wordCount = keyword.split(' ').length;
-    return (
-      keyword[0].toUpperCase() === keyword[0] ||
-      (wordCount > 1 && wordCount <= 3)
-    );
-  });
-
-  setKeywords(keywordsToSet.slice(0, 5));
-};
-
-const shouldScroll = (textRef, id) => {
-  const lastWord = document.getElementById(id);
-  const textLocation = textRef.current?.getBoundingClientRect();
-  const lastWordLocation = lastWord?.getBoundingClientRect();
-
-  if (textLocation && lastWordLocation) {
-    if (textLocation.bottom <= lastWordLocation.top) {
-      const ref = textRef.current;
-      ref.scrollTop += 50;
-    }
-  }
-};
-
 const onFinish = () => {
   message.success('Your reading is done!');
   setTimeout(() => {
@@ -81,7 +46,6 @@ const onFinish = () => {
 
 const Dashboard = () => {
   const readerRef = useRef();
-  const textRef = useRef();
   const [FRS, setFRS] = useState();
   const [pose, setPose] = useState();
   const [text, setText] = useState('');
@@ -130,10 +94,6 @@ const Dashboard = () => {
     }
   }, [pose, shouldRead]);
 
-  useEffect(() => {
-    loadKeywords(text, setKeywords);
-  }, [text]);
-
   return (
     <div style={{width: 500, height: '75vh', overflow: 'scroll'}}>
       {FRS && (
@@ -155,39 +115,6 @@ const Dashboard = () => {
       )}
       {readerRef.current?.state.words.length > 1 ? (
         <>
-          <KeywordsSection>
-            {keywords.map((keyword) => (
-              <Tag color="#f54747" style={{color: 'black'}} key={keyword}>
-                {keyword}
-              </Tag>
-            ))}
-          </KeywordsSection>
-          <TextSection ref={textRef}>
-            {readerRef.current?.state.words.map((word, index) => {
-              const id = word + index;
-              if (index === readerRef.current?.state.currentPosition - 1) {
-                shouldScroll(textRef, id);
-                return (
-                  <Fragment key={id}>
-                    <CurrentWordSmall id={id}>{word}</CurrentWordSmall>
-                  </Fragment>
-                );
-              } else {
-                return (
-                  <Fragment key={id}>
-                    <WordSmall
-                      id={id}
-                      onClick={() => {
-                        readerRef.current?.setCurrentPosition(index);
-                      }}
-                    >
-                      {word}{' '}
-                    </WordSmall>{' '}
-                  </Fragment>
-                );
-              }
-            })}
-          </TextSection>
           <InformationSection>WPM: {speed}</InformationSection>
           <Controls>
             <Button

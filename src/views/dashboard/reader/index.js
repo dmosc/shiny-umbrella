@@ -1,8 +1,16 @@
 /* eslint-disable camelcase */
 /* eslint-disable valid-jsdoc */
-import React, {Component} from 'react';
+import React, {Component, Fragment, createRef} from 'react';
 import PropTypes from 'prop-types';
-import {Word} from './elements';
+import {Tag} from 'antd';
+import keywordExtractor from 'keyword-extractor';
+import {
+  Word,
+  TextSection,
+  KeywordsSection,
+  CurrentWordSmall,
+  WordSmall,
+} from './elements';
 
 export const MILLISECONDS_IN_MINUTE = 60000;
 export const WHITESPACE_SEPARATOR = ' ';
@@ -60,6 +68,7 @@ class SpeedyReader extends Component {
      * @property {string} words All the words contained with the passage of text
      */
     this.state = this.getInitialState();
+    this.textRef = createRef();
     /**
      * The timer instance id
      * @type {number}
@@ -85,6 +94,7 @@ class SpeedyReader extends Component {
   }
 
   componentDidMount() {
+    this.loadKeywords();
     const {autoPlay} = this.props;
     if (autoPlay) {
       this.play();
@@ -104,10 +114,14 @@ class SpeedyReader extends Component {
   }
 
   setCurrentPosition(currentPosition) {
-    this.setState({
-      currentPosition,
-    });
-    this.update();
+    this.setState(
+      {
+        currentPosition: currentPosition + 1,
+        currentText: this.state.words[currentPosition],
+        isPlaying: this.state.isPlaying,
+      },
+      () => this.update(),
+    );
   }
 
   componentWillUnmount() {
@@ -236,18 +250,85 @@ class SpeedyReader extends Component {
     }, timeout);
   }
 
+  shouldScroll(id) {
+    const lastWord = document.getElementById(id);
+    const textLocation = this.textRef.current?.getBoundingClientRect();
+    const lastWordLocation = lastWord?.getBoundingClientRect();
+
+    if (textLocation && lastWordLocation) {
+      if (textLocation.bottom - 10 <= lastWordLocation.top) {
+        const ref = this.textRef.current;
+        ref.scrollTop += 150;
+      }
+    }
+  }
+
+  loadKeywords(text) {
+    const extractedKeywords = keywordExtractor.extract(text, {
+      return_chained_words: true,
+      remove_duplicates: true,
+    });
+
+    const keywordsToSet = extractedKeywords.filter((keyword) => {
+      const wordCount = keyword.split(' ').length;
+      return (
+        keyword[0].toUpperCase() === keyword[0] ||
+        (wordCount > 1 && wordCount <= 3)
+      );
+    });
+
+    this.setState({keywords: keywordsToSet.slice(0, 5)});
+  }
+
   /**
    * Renders the Speedy Reader component
    * @return {JSX.Element} Renders the Speedy Reader markup
    */
   render() {
-    const {currentText} = this.state;
+    const {currentText, words, currentPosition, keywords} = this.state;
 
     if (!currentText) {
       return <Word>&nbsp;</Word>;
     }
 
-    return <Word>{currentText}</Word>;
+    return (
+      <>
+        <Word>{currentText}</Word>
+        <KeywordsSection>
+          {keywords?.map((keyword) => (
+            <Tag color="#f54747" style={{color: 'black'}} key={keyword}>
+              {keyword}
+            </Tag>
+          ))}
+        </KeywordsSection>
+        <TextSection ref={this.textRef}>
+          {words.map((word, index) => {
+            const id = word + index;
+            if (index === currentPosition - 1) {
+              this.shouldScroll(id);
+              return (
+                <Fragment key={id}>
+                  <CurrentWordSmall id={id}>{word}</CurrentWordSmall>
+                </Fragment>
+              );
+            } else {
+              return (
+                <Fragment key={id}>
+                  <WordSmall
+                    id={id}
+                    onClick={() => {
+                      this.setCurrentPosition(index);
+                    }}
+                  >
+                    {word}{' '}
+                  </WordSmall>{' '}
+                </Fragment>
+              );
+            }
+          })}
+        </TextSection>
+      </>
+    );
   }
 }
 

@@ -143,7 +143,7 @@ const Dashboard = () => {
   }, [words, wpm]);
 
   return (
-    <div style={{width: 500, height: 900, overflow: scroll}}>
+    <div style={{width: 500, height: 900, overflow: 'scroll'}}>
       {FRS && (
         <Sketch
           setup={FRS.setup}

@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this */
 import ml5 from 'ml5';
 
 class FaceRecognitionModel {

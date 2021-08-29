@@ -10,18 +10,23 @@
     "lint": "eslint",
     "format": "prettier --write"
   },
+  "permissions": [
+    "activeTab",
+    "clipboardWrite"
+  ],
   "dependencies": {
     "@babel/cli": "^7.11.5",
     "@babel/core": "^7.11.5",
+    "@babel/helper-call-delegate": "^7.12.13",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.5",
     "antd": "^4.16.13",
     "ml5": "^0.6.1",
     "react": "^16.13.1",
+    "react-browser-extension-scripts": "^4.0.10",
     "react-dom": "^16.13.1",
     "react-p5": "^1.3.19",
     "react-router-dom": "^5.2.1",
-    "react-scripts": "3.4.3",
     "styled-components": "^5.3.1"
   },
   "devDependencies": {

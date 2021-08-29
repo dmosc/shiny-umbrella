@@ -41,6 +41,10 @@ const loadKeywords = (text, setKeywords) => {
   setKeywords(keywordsToSet.slice(5));
 };
 
+const wordsPerMinuteToMs = (wpm) => {
+  return (wpm / 60) * 1000;
+};
+
 const Dashboard = () => {
   const [currentWord, setCurrentWord] = useState(0);
   const [FRS, setFRS] = useState();
@@ -113,7 +117,7 @@ const Dashboard = () => {
           }
           return isPaused;
         });
-      }, 100);
+      }, wordsPerMinuteToMs(200));
 
       return () => clearInterval(interval);
     }
@@ -139,7 +143,6 @@ const Dashboard = () => {
           size="large"
         />
       </Controls>
-      <TextSection>{text}</TextSection>
       <KeywordsSection>
         {keywords.map((keyword) => (
           <Tag color="#87d068" key={keyword}>
@@ -147,6 +150,7 @@ const Dashboard = () => {
           </Tag>
         ))}
       </KeywordsSection>
+      <TextSection>{text}</TextSection>
     </div>
   );
 };

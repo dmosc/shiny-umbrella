@@ -13,8 +13,7 @@ const TextSection = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20px;
-  margin-top: 20px;
-  height: 400px;
+  //height: 400px;
   color: white;
   font-weight: bold;
   overflow: scroll;
@@ -24,6 +23,8 @@ const KeywordsSection = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
+  margin-top: 20px;
+  padding: 20px;
 
   > * {
     margin: 2px;

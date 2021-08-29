@@ -49,16 +49,13 @@ class FaceRecognitionModel {
 
   isFacingAway = () => {
     const {jawOutline} = this.face.parts;
-    const differenceThreshold = 145;
+    const threshold = 145;
     const size = jawOutline.length - 1;
     const pointsToTest = 3;
 
     let i = 0;
     while (i < pointsToTest) {
-      if (
-        Math.abs(jawOutline[size - i]._x - jawOutline[i]._x) >
-        differenceThreshold
-      ) {
+      if (Math.abs(jawOutline[size - i]._x - jawOutline[i]._x) > threshold) {
         return false; // At least one comparison is within threshold.
       }
       ++i;

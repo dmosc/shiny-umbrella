@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Layout} from 'antd';
 import Navbar from './navbar';
-import Footer from './footer';
 import {Content} from './elements';
 
 const MainLayout = ({children}) => {
@@ -11,7 +10,6 @@ const MainLayout = ({children}) => {
       <Layout>
         <Navbar />
         <Content>{children}</Content>
-        <Footer />
       </Layout>
     </Layout>
   );

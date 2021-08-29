@@ -58,7 +58,12 @@ const NotFoundText = styled.p`
 `;
 
 const WordSmall = styled.span`
-  padding: 1px;
+  cursor: pointer;
+  padding: 3px;
+
+  &:hover {
+    color: green;
+  }
 `;
 
 const CurrentWordSmall = styled(WordSmall)`

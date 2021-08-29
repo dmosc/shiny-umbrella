@@ -109,8 +109,6 @@ const Dashboard = () => {
     loadKeywords(text, setKeywords);
   }, [text]);
 
-  console.log(speed);
-
   return (
     <div style={{width: 500, height: '75vh', overflow: 'scroll'}}>
       {FRS && (
@@ -135,12 +133,16 @@ const Dashboard = () => {
           <TextSection>
             {readerRef.current?.state.words.map((word, index) =>
               index === readerRef.current?.state.currentPosition - 1 ? (
-                <Fragment key={word + index}>
-                  <CurrentWordSmall>{word}</CurrentWordSmall>{' '}
-                </Fragment>
+                <CurrentWordSmall key={word + index}>{word}</CurrentWordSmall>
               ) : (
                 <Fragment key={word + index}>
-                  <WordSmall>{word} </WordSmall>{' '}
+                  <WordSmall
+                    onClick={() => {
+                      readerRef.current?.setCurrentPosition(index);
+                    }}
+                  >
+                    {word}{' '}
+                  </WordSmall>{' '}
                 </Fragment>
               ),
             )}

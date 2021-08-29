@@ -103,6 +103,13 @@ class SpeedyReader extends Component {
     }
   }
 
+  setCurrentPosition(currentPosition) {
+    this.setState({
+      currentPosition,
+    });
+    this.update();
+  }
+
   componentWillUnmount() {
     if (this.timer) {
       clearTimeout(this.timer);

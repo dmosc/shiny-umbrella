@@ -5,7 +5,7 @@ import React, {Fragment, useEffect, useRef, useState} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
 import {POSES} from 'utils/constants';
-import {Button, Tag} from 'antd';
+import {Button, message, Tag} from 'antd';
 import {
   Controls,
   CurrentWordSmall,
@@ -72,6 +72,13 @@ const shouldScroll = (textRef, id) => {
   }
 };
 
+const onFinish = () => {
+  message.success('Your reading is done!');
+  setTimeout(() => {
+    window.close();
+  }, 3000);
+};
+
 const Dashboard = () => {
   const readerRef = useRef();
   const textRef = useRef();
@@ -136,7 +143,14 @@ const Dashboard = () => {
           draw={() => setPose(FRS.pose)}
         />
       )}
-      {text && <Reader ref={readerRef} speed={speed} inputText={text} />}
+      {text && (
+        <Reader
+          ref={readerRef}
+          speed={speed}
+          inputText={text}
+          onFinish={onFinish}
+        />
+      )}
       {readerRef.current?.state.words.length > 1 ? (
         <>
           <KeywordsSection>

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
 import {POSES} from 'utils/constants';
-import {TextSection, WordSection} from './elements';
+import {WordSection} from './elements';
 
 const onKeyPressed = (p5, event) => {
   if (!p5 || !event) return;
@@ -86,7 +86,7 @@ const Dashboard = () => {
         />
       )}
       <WordSection>{currentWord}</WordSection>
-      <TextSection>{text}</TextSection>
+      {/* <TextSection>{text}</TextSection> */}
     </div>
   );
 };

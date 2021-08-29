@@ -5,6 +5,7 @@ const WordSection = styled.div`
   justify-content: center;
   font-weight: bold;
   font-size: xxx-large;
+  color: #f54747;
 `;
 
 const TextSection = styled.div`

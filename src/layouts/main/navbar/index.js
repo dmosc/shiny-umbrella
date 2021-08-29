@@ -7,19 +7,25 @@ const NavBar = () => {
     <NavbarContainer>
       <Menu
         mode="horizontal"
-        style={{display: 'flex', justifyContent: 'flex-end'}}
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          backgroundColor: '#363636',
+        }}
       >
         <PageHeader
           style={{
             marginRight: 'auto',
+            marginLeft: 'auto',
             marginTop: 5,
             marginBottom: 5,
-            padding: '0px 20px',
+            padding: '0px 40px',
+            backgroundColor: '#363636',
           }}
           title={
             <img
-              style={{height: '40px'}}
-              src="/static/logo.png"
+              style={{height: '80px'}}
+              src="/static/spree-logo.png"
               alt="Precise Fit"
             />
           }

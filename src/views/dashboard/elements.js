@@ -1,13 +1,5 @@
 import styled from 'styled-components';
 
-const WordSection = styled.div`
-  display: flex;
-  justify-content: center;
-  font-weight: bold;
-  font-size: xxx-large;
-  color: #f54747;
-`;
-
 const TextSection = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -74,7 +66,6 @@ const CurrentWordSmall = styled(WordSmall)`
 `;
 
 export {
-  WordSection,
   TextSection,
   Controls,
   Image,

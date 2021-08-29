@@ -15,10 +15,10 @@ import {
   KeywordsSection,
 } from './elements';
 import {
-  DownOutlined,
-  UpOutlined,
-  PauseOutlined,
-  PlayCircleOutlined,
+  DownCircleOutlined,
+  UpCircleOutlined,
+  PauseCircleOutlined,
+  PlayCircleCircleOutlined,
 } from '@ant-design/icons';
 import keywordExtractor from 'keyword-extractor';
 import Reader from './reader';
@@ -55,7 +55,6 @@ const loadKeywords = (text, setKeywords) => {
 
   setKeywords(keywordsToSet.slice(0, 5));
 };
-
 
 const Dashboard = () => {
   const readerRef = useRef();
@@ -110,7 +109,7 @@ const Dashboard = () => {
     loadKeywords(text, setKeywords);
   }, [text]);
 
-  console.log(speed)
+  console.log(speed);
 
   return (
     <div style={{width: 500, height: 900, overflow: 'scroll'}}>
@@ -148,28 +147,31 @@ const Dashboard = () => {
           </TextSection>
           <Controls>
             <Button
+              style={{boxShadow: '0px 5px 5px #0f0f0f'}}
               ghost
               danger
-              icon={<DownOutlined />}
+              icon={<DownCircleOutlined />}
               size="large"
               onClick={() => setSpeed((prev) => prev - 25)}
             />
             <Button
+              style={{boxShadow: '0px 5px 5px #0f0f0f'}}
               ghost
               danger
               icon={
                 !readerRef.current?.state.isPlaying ? (
-                  <PlayCircleOutlined />
+                  <PlayCircleCircleOutlined />
                 ) : (
-                  <PauseOutlined />
+                  <PauseCircleOutlined />
                 )
               }
               size="large"
             />
             <Button
+              style={{boxShadow: '0px 5px 5px #0f0f0f'}}
               ghost
               danger
-              icon={<UpOutlined />}
+              icon={<UpCircleOutlined />}
               size="large"
               onClick={() => setSpeed((prev) => prev + 25)}
             />

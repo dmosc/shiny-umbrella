@@ -10,14 +10,15 @@ const TextSection = styled.div`
   height: 40vh;
   overflow: scroll;
   flex-wrap: wrap;
-  box-shadow: 0px 5px 5px #0f0f0f;
+  scroll-behavior: smooth;
+  box-shadow: 0px 5px 10px #0f0f0f;
 `;
 
 const KeywordsSection = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  margin: 10px 0 0 0;
+  margin: 10px 0;
 
   > * {
     margin: 2px;
@@ -41,7 +42,7 @@ const Controls = styled.div`
 const InformationSection = styled.div`
   display: flex;
   color: honeydew;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 const Image = styled.img`

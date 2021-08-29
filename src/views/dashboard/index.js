@@ -1,4 +1,6 @@
 /* eslint-disable valid-jsdoc */
+/* eslint-disable */
+
 import React, {Fragment, useEffect, useRef, useState} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
@@ -57,8 +59,22 @@ const loadKeywords = (text, setKeywords) => {
   setKeywords(keywordsToSet.slice(0, 5));
 };
 
+const shouldScroll = (textRef, id) => {
+  const lastWord = document.getElementById(id);
+  const textLocation = textRef.current?.getBoundingClientRect();
+  const lastWordLocation = lastWord?.getBoundingClientRect();
+
+  if (textLocation && lastWordLocation) {
+    if (textLocation.bottom <= lastWordLocation.top) {
+      const ref = textRef.current;
+      ref.scrollTop += 50;
+    }
+  }
+};
+
 const Dashboard = () => {
   const readerRef = useRef();
+  const textRef = useRef();
   const [FRS, setFRS] = useState();
   const [pose, setPose] = useState();
   const [text, setText] = useState('');
@@ -130,24 +146,32 @@ const Dashboard = () => {
               </Tag>
             ))}
           </KeywordsSection>
-          <TextSection>
-            {readerRef.current?.state.words.map((word, index) =>
-              index === readerRef.current?.state.currentPosition - 1 ? (
-                <Fragment key={word + index}>
-                  <CurrentWordSmall>{word}</CurrentWordSmall>
-                </Fragment>
-              ) : (
-                <Fragment key={word + index}>
-                  <WordSmall
-                    onClick={() => {
-                      readerRef.current?.setCurrentPosition(index);
-                    }}
-                  >
-                    {word}{' '}
-                  </WordSmall>{' '}
-                </Fragment>
-              ),
-            )}
+          <TextSection ref={textRef}>
+            {readerRef.current?.state.words.map((word, index) => {
+              const id = word + index;
+
+              if (index === readerRef.current?.state.currentPosition - 1) {
+                shouldScroll(textRef, id);
+                return (
+                  <Fragment key={id}>
+                    <CurrentWordSmall id={id}>{word}</CurrentWordSmall>
+                  </Fragment>
+                );
+              } else {
+                return (
+                  <Fragment key={id}>
+                    <WordSmall
+                      id={id}
+                      onClick={() => {
+                        readerRef.current?.setCurrentPosition(index);
+                      }}
+                    >
+                      {word}{' '}
+                    </WordSmall>{' '}
+                  </Fragment>
+                );
+              }
+            })}
           </TextSection>
           <InformationSection>WPM: {speed}</InformationSection>
           <Controls>
@@ -157,7 +181,7 @@ const Dashboard = () => {
               danger
               icon={<DownCircleOutlined />}
               size="large"
-              onClick={() => setSpeed((prev) => prev - 25)}
+              onClick={() => setSpeed((prev) => Math.max(prev - 25, 25))}
             />
             <Button
               style={{boxShadow: '0px 5px 5px #0f0f0f'}}
@@ -170,8 +194,8 @@ const Dashboard = () => {
                   <PauseCircleOutlined />
                 )
               }
-              onClick={() => setShouldRead(!readerRef.current?.state.isPlaying)}
               size="large"
+              onClick={() => setShouldRead(!readerRef.current?.state.isPlaying)}
             />
             <Button
               style={{boxShadow: '0px 5px 5px #0f0f0f'}}
@@ -179,7 +203,7 @@ const Dashboard = () => {
               danger
               icon={<UpCircleOutlined />}
               size="large"
-              onClick={() => setSpeed((prev) => prev + 25)}
+              onClick={() => setSpeed((prev) => Math.max(prev + 25, 25))}
             />
           </Controls>
         </>

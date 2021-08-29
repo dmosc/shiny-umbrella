@@ -36,6 +36,10 @@ const Controls = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
+
+  > * {
+    margin: 20px 15px;
+  }
 `;
 
 const Image = styled.img`

@@ -15,7 +15,12 @@ import {
   CurrentWordSmall,
   KeywordsSection,
 } from './elements';
-import {PauseOutlined, PlayCircleOutlined} from '@ant-design/icons';
+import {
+  DownOutlined,
+  UpOutlined,
+  PauseOutlined,
+  PlayCircleOutlined,
+} from '@ant-design/icons';
 import keywordExtractor from 'keyword-extractor';
 
 const onKeyPressed = (p5, event) => {
@@ -48,11 +53,11 @@ const loadKeywords = (text, setKeywords) => {
     );
   });
 
-  setKeywords(keywordsToSet.slice(5));
+  setKeywords(keywordsToSet.slice(0, 5));
 };
 
 const wordsPerMinuteToMs = (wpm) => {
-  return (60 * 1000) / 200;
+  return 600000 / wpm;
 };
 
 const Dashboard = () => {
@@ -64,6 +69,7 @@ const Dashboard = () => {
   const [words, setWords] = useState([]);
   const [keywords, setKeywords] = useState([]);
   const [pause, setPause] = useState(true);
+  const [wpm, setWpm] = useState(wordsPerMinuteToMs(200));
 
   const getText = () => {
     const message = {message: 'GET_SELECTED_TEXT'};
@@ -116,26 +122,25 @@ const Dashboard = () => {
   }, [text]);
 
   useEffect(() => {
+    console.log(wpm);
     if (words.length) {
       const interval = setInterval(() => {
         setPause((isPaused) => {
           if (currentWordIndex < words.length && !isPaused) {
             setCurrentWordIndex((prev) => {
-              setCurrentWord(words[prev + 1]);
+              setCurrentWord(words[prev]);
               return prev + 1;
             });
           }
           return isPaused;
         });
-      }, wordsPerMinuteToMs(200));
+      }, wpm);
 
       return () => clearInterval(interval);
     }
 
     return () => {};
-  }, [words]);
-
-  console.log(keywords);
+  }, [words, wpm]);
 
   return (
     <div style={{width: 500, height: 900, overflow: scroll}}>
@@ -149,14 +154,13 @@ const Dashboard = () => {
       {words.length > 1 ? (
         <>
           <WordSection>{currentWord}</WordSection>
-          <Controls>
-            <Button
-              ghost
-              danger
-              icon={!pause ? <PlayCircleOutlined /> : <PauseOutlined />}
-              size="large"
-            />
-          </Controls>
+          <KeywordsSection>
+            {keywords.map((keyword) => (
+              <Tag color="#87d068" key={keyword}>
+                {keyword}
+              </Tag>
+            ))}
+          </KeywordsSection>
           <TextSection>
             {words.map((word, index) =>
               index === currentWordIndex ? (
@@ -170,13 +174,28 @@ const Dashboard = () => {
               ),
             )}
           </TextSection>
-          <KeywordsSection>
-            {keywords.map((keyword) => (
-              <Tag color="#87d068" key={keyword}>
-                {keyword}
-              </Tag>
-            ))}
-          </KeywordsSection>
+          <Controls>
+            <Button
+              ghost
+              danger
+              icon={<DownOutlined />}
+              size="large"
+              onClick={() => setWpm(wordsPerMinuteToMs(wpm - 25))}
+            />
+            <Button
+              ghost
+              danger
+              icon={!pause ? <PlayCircleOutlined /> : <PauseOutlined />}
+              size="large"
+            />
+            <Button
+              ghost
+              danger
+              icon={<UpOutlined />}
+              size="large"
+              onClick={() => setWpm(wordsPerMinuteToMs(wpm - 25))}
+            />
+          </Controls>
         </>
       ) : (
         <NotFoundContainer>

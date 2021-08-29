@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import client from 'client';
+import React from 'react';
+import {Switch, Route, Redirect} from 'react-router-dom';
+import Layout from './layouts/main';
+import Dashboard from './views/dashboard';
+import Reading from './views/reading';
 
 const App = () => {
-  const [message, setMessage] = useState(undefined);
-
-  useEffect(() => {
-    (async () => {
-      const {data, error} = await client.get('/');
-
-      if (error) setMessage(error.toString());
-      else setMessage(data);
-    })();
-  }, []);
-
-  return <div>{message}</div>;
+  return (
+    <Layout>
+      <Switch>
+        <Route exact path="/" component={Dashboard} />
+        <Route exact path="/reading" component={Reading} />
+        <Redirect to="/" />
+      </Switch>
+    </Layout>
+  );
 };
 
 export default App;

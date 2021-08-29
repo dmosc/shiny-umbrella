@@ -1,10 +1,20 @@
 /* eslint-disable valid-jsdoc */
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import FaceRecognitionService from 'utils/face-recognition-model';
 import Sketch from 'react-p5';
 import {POSES} from 'utils/constants';
 import {Tag, Button} from 'antd';
-import {WordSection, TextSection, KeywordsSection, Controls} from './elements';
+import {
+  WordSection,
+  TextSection,
+  Controls,
+  Image,
+  NotFoundContainer,
+  NotFoundText,
+  WordSmall,
+  CurrentWordSmall,
+  KeywordsSection,
+} from './elements';
 import {PauseOutlined, PlayCircleOutlined} from '@ant-design/icons';
 import keywordExtractor from 'keyword-extractor';
 

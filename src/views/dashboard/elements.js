@@ -10,13 +10,14 @@ const WordSection = styled.div`
 
 const TextSection = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 20px;
   //height: 400px;
   color: white;
   font-weight: bold;
   overflow: scroll;
+  flex-wrap: wrap;
 `;
 
 const KeywordsSection = styled.div`
@@ -37,4 +38,41 @@ const Controls = styled.div`
   justify-content: center;
 `;
 
-export {WordSection, TextSection, KeywordsSection, Controls};
+const Image = styled.img`
+  margin-top: 20px;
+  margin: '10px auto';
+  height: 200px;
+`;
+
+const NotFoundContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+`;
+
+const NotFoundText = styled.p`
+  text-align: center;
+  color: white;
+  font-size: 22px;
+`;
+
+const WordSmall = styled.span`
+  padding: 1px;
+`;
+
+const CurrentWordSmall = styled(WordSmall)`
+  background-color: green;
+`;
+
+export {
+  WordSection,
+  TextSection,
+  Controls,
+  Image,
+  NotFoundContainer,
+  NotFoundText,
+  WordSmall,
+  CurrentWordSmall,
+  KeywordsSection,
+};

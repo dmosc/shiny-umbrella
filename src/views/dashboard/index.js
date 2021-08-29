@@ -87,6 +87,10 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    if (pose === POSES.SMILING) {
+      setSpeed((prev) => Math.max(prev + 25, 25));
+    }
+
     if (pose === POSES.FACING_FRONT && shouldRead) {
       readerRef.current?.play();
     } else {

@@ -39,6 +39,8 @@ class FaceRecognitionModel {
 
       if (this.isFacingAway()) {
         this.pose = POSES.FACING_AWAY;
+      } else if (this.isSmiling()) {
+        this.pose = POSES.SMILING;
       } else {
         this.pose = POSES.FACING_FRONT;
       }
@@ -62,6 +64,28 @@ class FaceRecognitionModel {
     }
 
     return true;
+  };
+
+  isSmiling = () => {
+    const {mouth} = this.face.parts;
+    const threshold = 2;
+    const pairsToTest = [
+      [0, 2],
+      [4, 6],
+    ];
+
+    if (mouth) {
+      for (let i = 0; i < pairsToTest.length; ++i) {
+        const [a, b] = pairsToTest[i];
+        if (Math.abs(mouth[a]._y - mouth[b]._y) > threshold) {
+          return false; // At least one comparison is within threshold.
+        }
+      }
+
+      return true;
+    }
+
+    return false;
   };
 }
 

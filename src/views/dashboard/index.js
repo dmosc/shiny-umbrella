@@ -52,7 +52,7 @@ const loadKeywords = (text, setKeywords) => {
 };
 
 const wordsPerMinuteToMs = (wpm) => {
-  return (wpm / 60) * 1000;
+  return (60 * 1000) / 200;
 };
 
 const Dashboard = () => {
@@ -135,6 +135,8 @@ const Dashboard = () => {
     return () => {};
   }, [words]);
 
+  console.log(keywords);
+
   return (
     <div style={{width: 500, height: 900, overflow: scroll}}>
       {FRS && (
@@ -144,23 +146,44 @@ const Dashboard = () => {
           draw={() => setPose(FRS.pose)}
         />
       )}
-      <WordSection>{currentWord}</WordSection>
-      <Controls>
-        <Button
-          ghost
-          danger
-          icon={!pause ? <PlayCircleOutlined /> : <PauseOutlined />}
-          size="large"
-        />
-      </Controls>
-      <KeywordsSection>
-        {keywords.map((keyword) => (
-          <Tag color="#87d068" key={keyword}>
-            {keyword}
-          </Tag>
-        ))}
-      </KeywordsSection>
-      <TextSection>{text}</TextSection>
+      {words.length > 1 ? (
+        <>
+          <WordSection>{currentWord}</WordSection>
+          <Controls>
+            <Button
+              ghost
+              danger
+              icon={!pause ? <PlayCircleOutlined /> : <PauseOutlined />}
+              size="large"
+            />
+          </Controls>
+          <TextSection>
+            {words.map((word, index) =>
+              index === currentWordIndex ? (
+                <Fragment key={word + index}>
+                  <CurrentWordSmall>{word}</CurrentWordSmall>{' '}
+                </Fragment>
+              ) : (
+                <Fragment key={word + index}>
+                  <WordSmall>{word} </WordSmall>{' '}
+                </Fragment>
+              ),
+            )}
+          </TextSection>
+          <KeywordsSection>
+            {keywords.map((keyword) => (
+              <Tag color="#87d068" key={keyword}>
+                {keyword}
+              </Tag>
+            ))}
+          </KeywordsSection>
+        </>
+      ) : (
+        <NotFoundContainer>
+          <Image src="./static/no-words.svg" />
+          <NotFoundText>No hay texto seleccionado</NotFoundText>
+        </NotFoundContainer>
+      )}
     </div>
   );
 };

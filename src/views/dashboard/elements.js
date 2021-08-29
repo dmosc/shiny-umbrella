@@ -12,9 +12,18 @@ const TextSection = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px;
+  padding: 20px;
   margin-top: 20px;
-  text-wrap: normal;
+  height: 400px;
+  color: white;
+  font-weight: bold;
+  overflow: scroll;
 `;
 
-export {WordSection, TextSection};
+const Controls = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+
+export {WordSection, TextSection, Controls};

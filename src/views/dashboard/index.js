@@ -80,7 +80,7 @@ const Dashboard = () => {
   const [text, setText] = useState('');
   const [keywords, setKeywords] = useState([]);
   const [speed, setSpeed] = useState(150);
-  const [should, setShouldRead] = useState(false);
+  const [shouldRead, setShouldRead] = useState(false);
 
   const getText = () => {
     const message = {message: 'GET_SELECTED_TEXT'};
@@ -116,12 +116,12 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (pose === POSES.FACING_FRONT && should) {
+    if (pose === POSES.FACING_FRONT && shouldRead) {
       readerRef.current?.play();
     } else {
       readerRef.current?.pause();
     }
-  }, [pose, should]);
+  }, [pose, shouldRead]);
 
   useEffect(() => {
     loadKeywords(text, setKeywords);
@@ -149,7 +149,6 @@ const Dashboard = () => {
           <TextSection ref={textRef}>
             {readerRef.current?.state.words.map((word, index) => {
               const id = word + index;
-
               if (index === readerRef.current?.state.currentPosition - 1) {
                 shouldScroll(textRef, id);
                 return (

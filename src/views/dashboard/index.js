@@ -69,7 +69,7 @@ const Dashboard = () => {
   const [words, setWords] = useState([]);
   const [keywords, setKeywords] = useState([]);
   const [pause, setPause] = useState(true);
-  const [wpm, setWpm] = useState(wordsPerMinuteToMs(200));
+  const [wpm, setWpm] = useState(200);
 
   const getText = () => {
     const message = {message: 'GET_SELECTED_TEXT'};
@@ -134,7 +134,7 @@ const Dashboard = () => {
           }
           return isPaused;
         });
-      }, wpm);
+      }, wordsPerMinuteToMs(wpm));
 
       return () => clearInterval(interval);
     }
@@ -180,7 +180,7 @@ const Dashboard = () => {
               danger
               icon={<DownOutlined />}
               size="large"
-              onClick={() => setWpm(wordsPerMinuteToMs(wpm - 25))}
+              onClick={() => setWpm(wpm - 25)}
             />
             <Button
               ghost
@@ -193,7 +193,7 @@ const Dashboard = () => {
               danger
               icon={<UpOutlined />}
               size="large"
-              onClick={() => setWpm(wordsPerMinuteToMs(wpm - 25))}
+              onClick={() => setWpm(wpm + 25)}
             />
           </Controls>
         </>

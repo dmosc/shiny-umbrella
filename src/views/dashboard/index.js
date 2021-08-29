@@ -63,6 +63,7 @@ const Dashboard = () => {
   const [text, setText] = useState('');
   const [keywords, setKeywords] = useState([]);
   const [speed, setSpeed] = useState(150);
+  const [should, setShouldRead] = useState(false);
 
   const getText = () => {
     const message = {message: 'GET_SELECTED_TEXT'};
@@ -98,12 +99,12 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (pose === POSES.FACING_FRONT) {
+    if (pose === POSES.FACING_FRONT && should) {
       readerRef.current?.play();
     } else {
       readerRef.current?.pause();
     }
-  }, [pose]);
+  }, [pose, should]);
 
   useEffect(() => {
     loadKeywords(text, setKeywords);
@@ -118,9 +119,7 @@ const Dashboard = () => {
           draw={() => setPose(FRS.pose)}
         />
       )}
-      {text && (
-        <Reader ref={readerRef} autoPlay speed={speed} inputText={text} />
-      )}
+      {text && <Reader ref={readerRef} speed={speed} inputText={text} />}
       {readerRef.current?.state.words.length > 1 ? (
         <>
           <KeywordsSection>
@@ -167,6 +166,7 @@ const Dashboard = () => {
                   <PauseCircleOutlined />
                 )
               }
+              onClick={() => setShouldRead(!readerRef.current?.state.isPlaying)}
               size="large"
             />
             <Button
@@ -181,7 +181,7 @@ const Dashboard = () => {
         </>
       ) : (
         <NotFoundContainer>
-          <Image src="./static/no-words.svg" />
+          <Image src="/static/no-words.svg" />
           <NotFoundText>No hay texto seleccionado</NotFoundText>
         </NotFoundContainer>
       )}

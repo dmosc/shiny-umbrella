@@ -1,6 +1,5 @@
 import React from 'react';
 import {PageHeader} from 'antd';
-import {Link} from 'react-router-dom';
 import {NavbarContainer, Menu} from './elements';
 
 const NavBar = () => {
@@ -18,13 +17,11 @@ const NavBar = () => {
             padding: '0px 20px',
           }}
           title={
-            <Link to="/">
-              <img
-                style={{height: '40px'}}
-                src="/static/logo.png"
-                alt="Precise Fit"
-              />
-            </Link>
+            <img
+              style={{height: '40px'}}
+              src="/static/logo.png"
+              alt="Precise Fit"
+            />
           }
         />
       </Menu>

@@ -7,7 +7,7 @@ import {Content} from './elements';
 
 const MainLayout = ({children}) => {
   return (
-    <Layout style={{minHeight: '100vh'}}>
+    <Layout>
       <Layout>
         <Navbar />
         <Content>{children}</Content>

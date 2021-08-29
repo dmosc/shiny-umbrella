@@ -26,19 +26,19 @@ import {
 import keywordExtractor from 'keyword-extractor';
 import Reader from './reader';
 
-const onKeyPressed = (p5, event) => {
+const onKeyPressed = (p5, event, setSpeed, setShouldRead, readerRef) => {
   if (!p5 || !event) return;
 
   if (event.key === 'p') {
-    console.log('Play/Pause');
+    setShouldRead(!readerRef.current?.state.isPlaying);
   }
 
   if (event.key === 'ArrowRight') {
-    console.log('Increase speed');
+    setSpeed((prev) => Math.max(prev + 25, 25));
   }
 
   if (event.key === 'ArrowLeft') {
-    console.log('Decrease speed');
+    setSpeed((prev) => Math.max(prev - 25, 25));
   }
 };
 
@@ -139,7 +139,9 @@ const Dashboard = () => {
       {FRS && (
         <Sketch
           setup={FRS.setup}
-          keyPressed={onKeyPressed}
+          keyPressed={(p5, event) =>
+            onKeyPressed(p5, event, setSpeed, setShouldRead, readerRef)
+          }
           draw={() => setPose(FRS.pose)}
         />
       )}

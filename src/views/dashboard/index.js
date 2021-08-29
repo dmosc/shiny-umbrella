@@ -18,7 +18,7 @@ import {
   DownCircleOutlined,
   UpCircleOutlined,
   PauseCircleOutlined,
-  PlayCircleCircleOutlined,
+  PlayCircleOutlined,
 } from '@ant-design/icons';
 import keywordExtractor from 'keyword-extractor';
 import Reader from './reader';
@@ -62,7 +62,7 @@ const Dashboard = () => {
   const [pose, setPose] = useState();
   const [text, setText] = useState('');
   const [keywords, setKeywords] = useState([]);
-  const [speed, setSpeed] = useState(250);
+  const [speed, setSpeed] = useState(150);
 
   const getText = () => {
     const message = {message: 'GET_SELECTED_TEXT'};
@@ -112,7 +112,7 @@ const Dashboard = () => {
   console.log(speed);
 
   return (
-    <div style={{width: 500, height: 900, overflow: 'scroll'}}>
+    <div style={{width: 500, height: '75vh', overflow: 'scroll'}}>
       {FRS && (
         <Sketch
           setup={FRS.setup}
@@ -127,7 +127,7 @@ const Dashboard = () => {
         <>
           <KeywordsSection>
             {keywords.map((keyword) => (
-              <Tag color="#87d068" style={{color: 'black'}} key={keyword}>
+              <Tag color="#f54747" style={{color: 'black'}} key={keyword}>
                 {keyword}
               </Tag>
             ))}
@@ -160,7 +160,7 @@ const Dashboard = () => {
               danger
               icon={
                 !readerRef.current?.state.isPlaying ? (
-                  <PlayCircleCircleOutlined />
+                  <PlayCircleOutlined />
                 ) : (
                   <PauseCircleOutlined />
                 )
